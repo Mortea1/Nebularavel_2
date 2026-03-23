@@ -72,7 +72,7 @@ class ProjectController extends Controller
         }
 
         return redirect()->route('projects.show', $project)
-                         ->with('success', 'Projet créé avec succès.');
+            ->with('success', 'Projet créé avec succès.');
     }
 
     public function edit(Project $project)
@@ -115,7 +115,7 @@ class ProjectController extends Controller
         }
 
         return redirect()->route('projects.show', $project)
-                         ->with('success', 'Projet mis à jour.');
+            ->with('success', 'Projet mis à jour.');
     }
 
     public function destroy(Project $project)
@@ -124,5 +124,15 @@ class ProjectController extends Controller
 
         $project->delete();
         return redirect()->route('projects')->with('success', 'Projet supprimé.');
+    }
+
+    // ─── Membres d'un projet (utilisé par le JS de ticket-create/edit) ───────
+    public function members(Project $project)
+    {
+        Gate::authorize('view', $project);
+
+        return response()->json(
+            $project->users()->select('users.id', 'users.name', 'users.role')->get()
+        );
     }
 }

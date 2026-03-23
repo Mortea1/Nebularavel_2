@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-    use HasFactory;
 
     protected $fillable = [
         'name',
@@ -21,7 +20,7 @@ class Project extends Model
     ];
 
     // ─── Relations ───────────────────────────────────────────────
-    public function users()
+    public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(User::class, 'project_users');
     }

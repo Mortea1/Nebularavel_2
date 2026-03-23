@@ -16,7 +16,6 @@
             <ul>@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
         </div>
     @endif
-
     <div class="profile-container">
 
         {{-- Avatar + infos rapides --}}

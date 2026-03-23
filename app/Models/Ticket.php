@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model
 {
-    use HasFactory;
 
     protected $fillable = [
         'title',
@@ -29,12 +28,12 @@ class Ticket extends Model
     ];
 
     // ─── Relations ───────────────────────────────────────────────
-    public function project()
+    public function project(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Project::class);
     }
 
-    public function assignedUser()
+    public function assignedUser(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_to');
     }

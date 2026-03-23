@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Validation extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'ticket_id',
         'user_id',
@@ -17,12 +15,12 @@ class Validation extends Model
     ];
 
     // ─── Relations ───────────────────────────────────────────────
-    public function ticket()
+    public function ticket(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Ticket::class);
     }
 
-    public function user()
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
     }

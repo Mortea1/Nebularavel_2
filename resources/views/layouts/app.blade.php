@@ -6,6 +6,7 @@
     <link rel="icon" type="image/png" href="{{ asset('assets/images/icon.png') }}">
     <title>@yield('title') - Nebula</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
 <div class="app-container">
@@ -33,9 +34,6 @@
             </a>
             <a href="{{ url('/profile') }}" class="nav-item {{ request()->is('profile') ? 'active' : '' }}">
                 <span class="icon">👤</span><span>Profil</span>
-            </a>
-            <a href="{{ url('/settings') }}" class="nav-item {{ request()->is('settings') ? 'active' : '' }}">
-                <span class="icon">⚙️</span><span>Paramètres</span>
             </a>
 
             @if(auth()->user()->isAdmin())
@@ -69,7 +67,7 @@
         @endif
         @if(session('warning'))
             <div class="alert" style="background:#fff3cd; border:1px solid #f0c040; border-radius:8px; padding:.75rem 1rem; margin-bottom:1rem">
-                ⚠️ {{ session('warning') }}
+                {{ session('warning') }}
             </div>
         @endif
         @if(session('error'))

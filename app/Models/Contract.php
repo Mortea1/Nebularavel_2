@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Contract extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'file',
         'hours_included',
@@ -20,7 +18,7 @@ class Contract extends Model
     ];
 
     // ─── Relations ───────────────────────────────────────────────
-    public function project()
+    public function project(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Project::class);
     }
