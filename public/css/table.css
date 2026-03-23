@@ -1,0 +1,154 @@
+/* ==========================================
+   FILTERS
+   ========================================== */
+
+.filters {
+    display: flex;
+    gap: var(--spacing-lg);
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.filter-group label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.filter-group select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    background-color: var(--bg-primary);
+    color: var(--text-secondary);
+}
+
+.filter-group:hover select {
+    background-color: var(--bg-secondary);
+    color: var(--text-secondary);
+}
+
+.search-box {
+    margin-left: auto;
+}
+
+.search-box input {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    width: 300px;
+    font-size: 0.875rem;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* ==========================================
+   TABLE
+   ========================================== */
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table thead {
+    background-color: var(--bg-tertiary);
+}
+
+.data-table th {
+    padding: var(--spacing-md);
+    text-align: left;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-bottom: 2px solid var(--border-color);
+    background-color: var(--bg-primary);
+}
+
+.data-table td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.875rem;
+}
+
+.data-table tbody tr:hover {
+    background-color: var(--bg-secondary);
+}
+
+/* ==========================================
+   BADGES
+   ========================================== */
+
+.badge {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.badge-active {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--status-open);
+}
+
+.badge-in_progress {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: var(--status-progress);
+}
+
+.badge-on_hold{
+    background-color: rgba(245, 158, 11, 0.1);
+    color: var(--status-progress);
+}
+
+.badge-done {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--status-resolved);
+}
+
+.badge-closed {
+    background-color: rgba(100, 116, 139, 0.1);
+    color: var(--status-closed);
+}
+
+.badge-completed {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success-color);
+}
+
+.badge-open {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--info-color);
+}
+
+.badge-low {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--priority-low);
+}
+
+.badge-medium {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: var(--priority-medium);
+}
+
+.badge-high {
+    background-color: rgba(249, 115, 22, 0.1);
+    color: var(--priority-high);
+}
+
+.badge-critical {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--priority-urgent);
+}
