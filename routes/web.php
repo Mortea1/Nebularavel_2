@@ -41,8 +41,6 @@ Route::middleware(['auth', 'check.account.status'])->group(function () {
     Route::get('/projects/{project}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
     Route::put('/projects/{project}',      [ProjectController::class, 'update'])->name('projects.update');
     Route::delete('/projects/{project}',   [ProjectController::class, 'destroy'])->name('projects.destroy');
-
-    // Membres d'un projet (fetch par le JS des formulaires de ticket)
     Route::get('/projects/{project}/members', [ProjectController::class, 'members'])->name('projects.members');
 
     // Tickets
@@ -59,7 +57,6 @@ Route::middleware(['auth', 'check.account.status'])->group(function () {
     // Profil
     Route::get('/profile',          [ProfileController::class, 'index'])->name('profile');
     Route::put('/profile',          [ProfileController::class, 'update'])->name('profile.update');
-    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
     // Admin
     Route::prefix('admin')->name('admin.')->group(function () {
@@ -74,3 +71,4 @@ Route::middleware(['auth', 'check.account.status'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+require __DIR__.'/api.php';

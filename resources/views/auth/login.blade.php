@@ -60,17 +60,6 @@
                        placeholder="••••••••" required>
             </div>
 
-            <div class="form-options">
-                <label>
-                    <input type="checkbox" name="remember"> Se souvenir de moi
-                </label>
-                @if(Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="forgot-password">
-                        Mot de passe oublié ?
-                    </a>
-                @endif
-            </div>
-
             <button type="submit" class="btn btn-primary btn-block">
                 Se connecter
             </button>
