@@ -1,97 +1,102 @@
-// ─── Slideshow avatar ────────────────────────────────────────────────────────
-// Fait défiler les images de profil toutes les 3 secondes
-const avatarImg = document.querySelector('.profile-avatar img');
-const images = ['assets/img_profile/img1.png', 'assets/img_profile/img2.jpg', 'assets/img_profile/img3.png'];
-let currentIndex = 0;
+// ─── Toast ───────────────────────────────────────────────────────────────────
 
-setInterval(() => {
-    currentIndex = (currentIndex + 1) % images.length;
-    avatarImg.src = images[currentIndex];
-}, 3000); // 3 secondes (1000ms était trop rapide)
-
-
-// ─── Toast (notification flottante) ──────────────────────────────────────────
-// type = 'success' ou 'error'
 function showToast(message, type = 'success') {
     const toast = document.getElementById('toast');
     toast.textContent = message;
     toast.className = `toast show ${type}`;
 
-    // Disparaît après 4 secondes
-    setTimeout(() => {
-        toast.classList.remove('show');
-    }, 4000);
+    setTimeout(() => toast.classList.remove('show'), 4000);
 }
 
 
-// ─── Formulaire profil (nom, email, etc.) ────────────────────────────────────
-// Ce formulaire utilise un submit HTML classique — pas d'API, pas de fetch.
-// Laravel gère la validation et redirige avec un message flash.
+// ─── Formulaire profil ────────────────────────────────────────────────────────
+// Validation basique côté client — Laravel gère le reste server-side.
+
 document.getElementById('profileForm').addEventListener('submit', function (e) {
     const firstName = document.getElementById('firstName').value.trim();
     const lastName  = document.getElementById('lastName').value.trim();
     const email     = document.getElementById('email').value.trim();
 
-    if (!email || !firstName || !lastName) {
-        e.preventDefault(); // Bloque l'envoi du formulaire
+    if (!firstName || !lastName || !email) {
+        e.preventDefault();
         showToast('Veuillez remplir tous les champs obligatoires.', 'error');
     }
-    // Si tout est rempli → le formulaire s'envoie normalement (pas de preventDefault)
 });
 
 
-// ─── Formulaire mot de passe (appel API — pas de rechargement de page) ───────
-document.getElementById('passwordForm').addEventListener('submit', async function (e) {
-    e.preventDefault(); // On gère l'envoi nous-mêmes via fetch
+// ─── Modal — changement de mot de passe (API REST) ───────────────────────────
 
-    const currentPassword = document.getElementById('currentPassword').value.trim();
-    const newPassword     = document.getElementById('newPassword').value.trim();
-    const confirmPassword = document.getElementById('confirmPassword').value.trim();
+const modal      = document.getElementById('passwordModal');
+const modalError = document.getElementById('modalError');
+const submitBtn  = document.getElementById('submitPassword');
 
-    // Validation basique côté client avant d'envoyer au serveur
-    if (!currentPassword || !newPassword || !confirmPassword) {
-        showToast('Veuillez remplir tous les champs.', 'error');
+// Ouvrir
+document.getElementById('openPasswordModal').addEventListener('click', () => {
+    modalError.style.display = 'none';
+    modal.querySelectorAll('input').forEach(i => i.value = '');
+    modal.showModal();
+});
+
+// Fermer — bouton Annuler ou clic sur le fond
+document.getElementById('closePasswordModal').addEventListener('click', () => modal.close());
+modal.addEventListener('click', (e) => { if (e.target === modal) modal.close(); });
+
+// Soumettre
+submitBtn.addEventListener('click', async () => {
+    modalError.style.display = 'none';
+
+    const current      = document.getElementById('current_password').value;
+    const password     = document.getElementById('new_password').value;
+    const confirmation = document.getElementById('new_password_confirmation').value;
+
+    if (!current || !password || !confirmation) {
+        modalError.textContent = 'Veuillez remplir tous les champs.';
+        modalError.style.display = 'block';
         return;
     }
 
-    if (newPassword !== confirmPassword) {
-        showToast('Les deux nouveaux mots de passe ne correspondent pas.', 'error');
+    if (password !== confirmation) {
+        modalError.textContent = 'Les deux mots de passe ne correspondent pas.';
+        modalError.style.display = 'block';
         return;
     }
 
-    // Récupère le token CSRF depuis la balise <meta name="csrf-token"> dans le layout
-    // Ce token est obligatoire pour toutes les requêtes POST/PUT/DELETE avec Laravel
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'En cours…';
 
     try {
-        // Envoi de la requête au serveur sans recharger la page
-        const response = await fetch('/profile/password', {
+        const response = await fetch(modal.dataset.url, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken,
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json',
             },
             body: JSON.stringify({
-                current_password:       currentPassword,
-                password:               newPassword,
-                password_confirmation:  confirmPassword,
+                current_password:      current,
+                password:              password,
+                password_confirmation: confirmation,
             }),
         });
 
         const data = await response.json();
 
         if (response.ok) {
-            // Succès — on vide les champs et on affiche le toast
-            document.getElementById('passwordForm').reset();
-            showToast('Mot de passe mis à jour avec succès.', 'success');
+            modal.close();
+            showToast('Mot de passe modifié avec succès !', 'success');
         } else {
-            // Erreur de validation renvoyée par Laravel (ex: mauvais mot de passe actuel)
-            const firstError = Object.values(data.errors)[0][0];
-            showToast(firstError, 'error');
+            const messages = data.errors
+                ? Object.values(data.errors).flat().join('\n')
+                : (data.message || 'Une erreur est survenue.');
+            modalError.textContent = messages;
+            modalError.style.display = 'block';
         }
 
-    } catch (err) {
-        // Erreur réseau ou serveur inattendu
-        showToast('Une erreur est survenue, réessayez.', 'error');
+    } catch {
+        modalError.textContent = 'Erreur réseau, veuillez réessayer.';
+        modalError.style.display = 'block';
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Modifier';
     }
 });

@@ -1,0 +1,130 @@
+/* ==========================================
+   MODAL — CHANGEMENT DE MOT DE PASSE
+   ========================================== */
+
+
+dialog#passwordModal {
+    /* Positionnement */
+    position: fixed;
+    inset: 0;
+    margin: auto;
+
+    /* Dimensions */
+    width: 100%;
+    max-width: 460px;
+    padding: var(--spacing-xl);
+
+    /* Fond & bordure */
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow:
+        0 0 0 1px rgba(44, 255, 166, 0.1),
+        0 20px 60px rgba(0, 0, 0, 0.5);
+
+    /* Texte */
+    color: var(--text-primary);
+}
+
+/* Masquer le backdrop natif — on gère le nôtre */
+dialog#passwordModal::backdrop {
+    background: rgba(5, 4, 10, 0.7);
+    backdrop-filter: blur(4px);
+}
+
+/* ── Titre ── */
+dialog#passwordModal h2 {
+    font-family: var(--title-font);
+    font-size: 1.4rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-lg);
+    letter-spacing: 0.03em;
+}
+
+/* ── Champs ── */
+dialog#passwordModal .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+}
+
+dialog#passwordModal .form-group label {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+dialog#passwordModal .form-control {
+    width: 100%;
+    padding: 0.6rem var(--spacing-md);
+    background: var(--bg-primary);
+    border: 1px solid rgba(44, 255, 166, 0.25);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+dialog#passwordModal .form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(44, 255, 166, 0.15);
+}
+
+/* ── Erreur ── */
+dialog#passwordModal .alert-error {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-radius: var(--radius-md);
+    color: var(--danger-color);
+    font-size: 0.875rem;
+    margin-bottom: var(--spacing-md);
+    line-height: 1.5;
+}
+
+/* ── Actions ── */
+dialog#passwordModal .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+/* ── Boutons ── */
+dialog#passwordModal .btn {
+    padding: 0.55rem var(--spacing-lg);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.2s, box-shadow 0.2s;
+}
+
+dialog#passwordModal .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+dialog#passwordModal .btn-primary {
+    background: var(--primary-color);
+    color: #05040a;
+}
+
+dialog#passwordModal .btn-primary:hover:not(:disabled) {
+    background: var(--primary-hover);
+    box-shadow: 0 0 12px rgba(44, 255, 166, 0.35);
+}
+
+dialog#passwordModal .btn-secondary {
+    background: transparent;
+    color: var(--text-light);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+dialog#passwordModal .btn-secondary:hover:not(:disabled) {
+    border-color: var(--text-light);
+    color: var(--text-primary);
+}

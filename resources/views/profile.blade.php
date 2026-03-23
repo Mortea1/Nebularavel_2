@@ -3,6 +3,7 @@
 @section('title', 'Mon Profil')
 
 @section('content')
+
     <header class="page-header">
         <h1>Mon Profil</h1>
     </header>
@@ -16,6 +17,7 @@
             <ul>@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
         </div>
     @endif
+
     <div class="profile-container">
 
         {{-- Avatar + infos rapides --}}
@@ -23,14 +25,12 @@
             <div class="profile-avatar-section">
                 <div class="profile-avatar">
                     <span class="avatar-placeholder">
-                        @if(Auth::user()->avatar)
-                            <img src="{{ asset('assets/img_profile/' . Auth::user()->avatar) }}" alt="Avatar">
-                        @else
-                            <img src="{{ asset('assets/img_profile/img1.png') }}" alt="Avatar">
-                        @endif
+                        <img
+                            src="{{ asset('assets/img_profile/' . (Auth::user()->avatar ?? 'img1.png')) }}"
+                            alt="Avatar"
+                        >
                     </span>
                 </div>
-                <button class="btn btn-outline btn-small">Changer la photo</button>
             </div>
             <div class="profile-header-info">
                 <h2>{{ Auth::user()->full_name }}</h2>
@@ -42,20 +42,20 @@
             </div>
         </div>
 
-        {{-- Infos personnelles --}}
+        {{-- Informations personnelles --}}
         <div class="content-section">
             <h2>Informations personnelles</h2>
-            <form class="profile-form" method="POST" action="{{ route('profile.update') }}">
+            <form id="profileForm" class="profile-form" method="POST" action="{{ route('profile.update') }}">
                 @csrf
                 @method('PUT')
                 <div class="form-row">
                     <div class="form-group">
                         <label>Prénom</label>
-                        <input type="text" name="first_name" value="{{ old('first_name', Auth::user()->first_name) }}">
+                        <input type="text" id="firstName" name="first_name" value="{{ old('first_name', Auth::user()->first_name) }}">
                     </div>
                     <div class="form-group">
                         <label>Nom</label>
-                        <input type="text" name="last_name" value="{{ old('last_name', Auth::user()->last_name) }}">
+                        <input type="text" id="lastName" name="last_name" value="{{ old('last_name', Auth::user()->last_name) }}">
                     </div>
                 </div>
                 <div class="form-row">
@@ -65,7 +65,7 @@
                     </div>
                     <div class="form-group">
                         <label>Email *</label>
-                        <input type="email" name="email" value="{{ old('email', Auth::user()->email) }}" required>
+                        <input type="email" id="email" name="email" value="{{ old('email', Auth::user()->email) }}" required>
                     </div>
                 </div>
                 <div class="form-row">
@@ -82,44 +82,36 @@
             </form>
         </div>
 
-        {{-- Bouton ouvrir modal --}}
+        {{-- Sécurité --}}
         <div class="content-section">
             <h2>Sécurité</h2>
-            <p>Modifiez votre mot de passe pour sécuriser votre compte.</p>
-            <button class="btn btn-outline" id="openPasswordModal">🔒 Changer le mot de passe</button>
+            <p>Modifiez votre mot de passe pour sécuriser votre compte.</p><br>
+            <button class="btn btn-outline" id="openPasswordModal">Changer le mot de passe</button>
         </div>
 
     </div>
 
-    {{-- Modal dialog --}}
-    <dialog id="passwordModal" style="
-        background: var(--bg-card, #1e1e2e);
-        color: var(--text-primary, #fff);
-        border: 1px solid var(--border-color, #333);
-        border-radius: 12px;
-        padding: 2rem;
-        width: 100%;
-        max-width: 460px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    ">
-        <h2 style="margin-bottom: 1.5rem;">Changer le mot de passe</h2>
+    {{-- Modal changement de mot de passe --}}
+    {{-- data-url évite d'écrire du Blade dans le JS externe --}}
+    <dialog id="passwordModal" data-url="{{ route('profile.password') }}">
+        <h2>Changer le mot de passe</h2>
 
-        <div id="modalError" class="alert alert-error" style="display:none; margin-bottom:1rem;"></div>
+        <div id="modalError" class="alert alert-error" style="display:none;"></div>
 
-        <div class="form-group" style="margin-bottom:1rem;">
+        <div class="form-group">
             <label>Mot de passe actuel *</label>
-            <input type="password" id="current_password" class="form-control" style="width:100%;">
+            <input type="password" id="current_password" class="form-control">
         </div>
-        <div class="form-group" style="margin-bottom:1rem;">
+        <div class="form-group">
             <label>Nouveau mot de passe *</label>
-            <input type="password" id="new_password" class="form-control" style="width:100%;">
+            <input type="password" id="new_password" class="form-control">
         </div>
-        <div class="form-group" style="margin-bottom:1.5rem;">
+        <div class="form-group">
             <label>Confirmer le nouveau mot de passe *</label>
-            <input type="password" id="new_password_confirmation" class="form-control" style="width:100%;">
+            <input type="password" id="new_password_confirmation" class="form-control">
         </div>
 
-        <div style="display:flex; gap:1rem; justify-content:flex-end;">
+        <div class="modal-actions">
             <button class="btn btn-secondary" id="closePasswordModal">Annuler</button>
             <button class="btn btn-primary" id="submitPassword">Modifier</button>
         </div>
@@ -128,68 +120,5 @@
 @endsection
 
 @push('scripts')
-    <script>
-        const modal        = document.getElementById('passwordModal');
-        const openBtn      = document.getElementById('openPasswordModal');
-        const closeBtn     = document.getElementById('closePasswordModal');
-        const submitBtn    = document.getElementById('submitPassword');
-        const modalError   = document.getElementById('modalError');
-
-        // Ouvrir
-        openBtn.addEventListener('click', () => {
-            modalError.style.display = 'none';
-            document.getElementById('current_password').value = '';
-            document.getElementById('new_password').value = '';
-            document.getElementById('new_password_confirmation').value = '';
-            modal.showModal();
-        });
-
-        // Fermer
-        closeBtn.addEventListener('click', () => modal.close());
-        modal.addEventListener('click', (e) => { if (e.target === modal) modal.close(); });
-
-        // Soumettre via fetch
-        submitBtn.addEventListener('click', async () => {
-            modalError.style.display = 'none';
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'En cours...';
-
-            try {
-                const response = await fetch('{{ route('profile.password') }}', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        current_password:      document.getElementById('current_password').value,
-                        password:              document.getElementById('new_password').value,
-                        password_confirmation: document.getElementById('new_password_confirmation').value,
-                    }),
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    modal.close();
-                    showToast('🔒 Mot de passe modifié avec succès !', 'success');
-                } else {
-                    // Affiche les erreurs de validation Laravel
-                    const messages = data.errors
-                        ? Object.values(data.errors).flat().join('<br>')
-                        : (data.message || 'Une erreur est survenue.');
-                    modalError.innerHTML = messages;
-                    modalError.style.display = 'block';
-                }
-
-            } catch (err) {
-                modalError.innerHTML = 'Erreur réseau, veuillez réessayer.';
-                modalError.style.display = 'block';
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Modifier';
-            }
-        });
-    </script>
+    <script src="{{ asset('js/profile.js') }}"></script>
 @endpush

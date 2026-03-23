@@ -12,8 +12,8 @@
 
     {{-- Alerte comptes en attente (admin seulement) --}}
     @if(auth()->user()->isAdmin() && $pending_count > 0)
-        <div class="alert" style="background:#fff3cd; border:1px solid #f0c040; border-radius:8px; padding:1rem 1.25rem; margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center;">
-            <span>⏳ <strong>{{ $pending_count }} compte(s)</strong> en attente de validation.</span>
+        <div class="alert" style="background:#6ece4c; border:1px solid #8926a9; border-radius:8px; padding:1rem 1.25rem; margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center;">
+            <span><strong>{{ $pending_count }} compte(s)</strong> en attente de validation.</span>
             <a href="{{ route('admin.users') }}" class="btn btn-primary btn-small">Gérer les utilisateurs</a>
         </div>
     @endif

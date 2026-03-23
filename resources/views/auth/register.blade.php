@@ -76,9 +76,6 @@
                 </div>
             </div>
 
-            <p class="form-hint" style="margin-bottom:1rem; font-size:.85rem; color:#666;">
-                ⏳ Votre compte sera examiné par un administrateur avant activation.
-            </p>
 
             <button type="submit" class="btn btn-primary btn-block">Envoyer ma demande</button>
 

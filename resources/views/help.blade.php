@@ -8,12 +8,6 @@
             <h1>Centre d'aide</h1>
         </header>
 
-        <!-- Search Help
-        <div class="help-search">
-            <input type="search" placeholder="Rechercher dans l'aide..." class="help-search-input">
-            <button class="btn btn-primary">Rechercher</button>
-        </div> -->
-
         <!-- Quick Links -->
         <div class="content-section">
             <h2>Liens rapides</h2>

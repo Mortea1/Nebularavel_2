@@ -17,32 +17,6 @@
             <p>Votre projet au coeur de notre univers</p>
         </div>
 
-        {{-- Messages flash (pending/rejected renvoyés par le middleware) --}}
-        @if(session('warning'))
-            <div class="error-box" style="background:#fff3cd; border-color:#f0c040; color:#856404;">
-                ⚠️ {{ session('warning') }}
-            </div>
-        @endif
-        @if(session('error'))
-            <div class="error-box" style="background:#fde8e8; border-color:#e53e3e; color:#c53030;">
-                ❌ {{ session('error') }}
-            </div>
-        @endif
-        @if(session('success'))
-            <div class="error-box" style="background:#e8f5e9; border-color:#48bb78; color:#276749;">
-                ✅ {{ session('success') }}
-            </div>
-        @endif
-
-        {{-- Erreurs de connexion --}}
-        @if($errors->any())
-            <div class="error-box">
-                @foreach($errors->all() as $error)
-                    <p>{{ $error }}</p>
-                @endforeach
-            </div>
-        @endif
-
         <form method="POST" action="{{ route('login') }}" class="login-form">
             @csrf
 
