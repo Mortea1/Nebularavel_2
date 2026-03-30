@@ -71,4 +71,3 @@ Route::middleware(['auth', 'check.account.status'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
-require __DIR__.'/api.php';

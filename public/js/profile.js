@@ -10,7 +10,6 @@ function showToast(message, type = 'success') {
 
 
 // ─── Formulaire profil ────────────────────────────────────────────────────────
-// Validation basique côté client — Laravel gère le reste server-side.
 
 document.getElementById('profileForm').addEventListener('submit', function (e) {
     const firstName = document.getElementById('firstName').value.trim();
@@ -65,12 +64,25 @@ submitBtn.addEventListener('click', async () => {
     submitBtn.textContent = 'En cours…';
 
     try {
+        // 1. Initialiser le cookie CSRF Sanctum
+        await fetch('/sanctum/csrf-cookie', {
+            method: 'GET',
+            credentials: 'include',
+        });
+
+        // 2. Lire le token XSRF depuis le cookie
+        const xsrfToken = decodeURIComponent(
+            document.cookie.split('; ').find(r => r.startsWith('XSRF-TOKEN='))?.split('=')[1] ?? ''
+        );
+
+        // 3. Envoyer la requête
         const response = await fetch(modal.dataset.url, {
             method: 'PUT',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Accept': 'application/json',
+                'Accept':        'application/json',
+                'X-XSRF-TOKEN':  xsrfToken,
             },
             body: JSON.stringify({
                 current_password:      current,
