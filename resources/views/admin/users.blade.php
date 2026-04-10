@@ -27,7 +27,7 @@
         </h2>
 
         @forelse($pending as $user)
-            <div class="activity-item" style="flex-wrap:wrap; gap:1rem; padding:1rem; border:1px solid #f0c040; border-radius:8px; margin-bottom:1rem; background:#fffdf0;">
+            <div class="activity-item" style="flex-wrap:wrap; gap:1rem; padding:1rem; border:1px solid #f0c040; border-radius:8px; margin-bottom:1rem;">
                 <div class="activity-details" style="flex:1; min-width:200px;">
                     <p><strong>{{ $user->full_name }}</strong>
                         <span class="badge badge-on_hold" style="margin-left:.5rem">pending</span>
